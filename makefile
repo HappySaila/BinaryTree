@@ -30,21 +30,22 @@ all: BinaryTreeNode.class \
 				TreeUtils.class \
 				SimpleTreeWriter.class \
 				SimpleBST.class \
+				SimpleTreeWriterImpl.class\
 
 				
 # Rules for generating documentation
 doc:
-	javadoc -d $(DOCDIR) $(SRCDIR)/*.java $(TESTDIR)/TestUtils.java
+	javadoc -d $(DOCDIR) $(SRCDIR)/*.java $(TESTDIR)/*.java
 
 # Rules for unit testing
-test_classes: all TestBinaryTreeNode.class TestUtils.class TestSuite.class
+test_classes: all TestBinaryTreeNode.class TestUtils.class TestSimpleTreeWriterImpl.class TestTreeUtils.class TestSuite.class
 
 test: test_classes
-	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
+	java -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
 	
 # Rules for generating tests
 jacoco.exec: test_classes
-	java -ea -javaagent:$(LIB)/jacoco/jacocoagent.jar -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
+	java -javaagent:$(LIB)/jacoco/jacocoagent.jar -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
 
 report: jacoco.exec
 	java -cp $(BINDIR):$(CLI):$(JACOCO):$(ASM):$(TOOLS) Report --reporttype html .
